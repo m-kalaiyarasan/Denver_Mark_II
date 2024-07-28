@@ -1,0 +1,15 @@
+nltk
+pyautogui
+SpeechRecognition
+pyttsx3
+wikipedia
+pyaudio
+opencv-python
+dlib
+dlib-19.24.99-cp312-cp312-win_amd64.whl
+cmake
+face_recognition_models
+face_recognition
+
+
+
