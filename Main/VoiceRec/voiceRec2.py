@@ -50,7 +50,7 @@ if not models:
 def recognize_voice_from_mic():
     with sr.Microphone() as source:
         recognizer.adjust_for_ambient_noise(source, duration=1)  # Adjust for ambient noise
-        print("Say something!")
+        print("Voice Verification needed!")
         try:
             audio = recognizer.listen(source, timeout=7, phrase_time_limit=3)  # Set a timeout and phrase time limit of 3 seconds
         except sr.WaitTimeoutError:
@@ -84,5 +84,5 @@ def recognize_voice_from_mic():
             print(e)
 
 # Call the function to recognize voice input
-a = recognize_voice_from_mic()
+# a = recognize_voice_from_mic()
 # print(a)

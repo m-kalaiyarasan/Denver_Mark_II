@@ -255,7 +255,7 @@ def generate_response(user_input):
 
 # Main interaction loop
 if __name__ == "__main__":
-    print("Type 'quit' to exit")
+    # print("Type 'quit' to exit")
     
     while True:
         speak("This is denver, an vritual assistant,")
