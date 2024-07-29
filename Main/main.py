@@ -162,6 +162,7 @@ def generate_response(user_input):
             user_input= user_input.replace('denver','')
             speak("playing"+user_input)
             pywhatkit.playonyt(user_input)
+            return ""
         
 
     elif 'thank' in user_input_tokens or 'see' in user_input_tokens:
