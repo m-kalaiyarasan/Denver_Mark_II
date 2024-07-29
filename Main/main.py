@@ -165,8 +165,8 @@ def generate_response(user_input):
         
 
     elif 'thank' in user_input_tokens or 'see' in user_input_tokens:
-        if 'later' in user_input or 'see' in user_input:
-            speak(",Goodbye sir. Have a great day!")
+        if 'thank' in user_input or 'see' in user_input:
+            speak(",Goodbye sir. Have a great day sir")
             exit()
     elif 'scan' in user_input_tokens:
         if 'face' in user_input:
@@ -244,7 +244,7 @@ def generate_response(user_input):
     # Find the best matching response for general conversations
     else :
         max_similarity = 0
-        best_response = "none"
+        best_response = "no"
         for pattern, response in conversations:
             pattern_tokens = preprocess(pattern)
             similarity = jaccard_similarity(set(user_input_tokens), set(pattern_tokens))
@@ -257,15 +257,15 @@ def generate_response(user_input):
 if __name__ == "__main__":
     # print("Type 'quit' to exit")
     
-    while True:
-        speak("This is denver, an vritual assistant,")
-        speak("Voice verification Needed !")
-        Verification = voiceRec2.recognize_voice_from_mic()
-        if 'kalai' in Verification:
-            speak("Verification Sucessfull, Hello sir")
-            break
-        else:
-            continue    
+    # while True:
+    #     speak("This is denver, an vritual assistant,")
+    #     speak("Voice verification Needed !")
+    #     Verification = voiceRec2.recognize_voice_from_mic()
+    #     if 'kalai' in Verification:
+    #         speak("Verification Sucessfull, Hello sir")
+    #         break
+    #     else:
+    #         continue    
     while True:    
         # user_input=wakeup().lower()
         # if "wake up" in user_input or "denver" in user_input:
@@ -276,9 +276,12 @@ if __name__ == "__main__":
                     break
                 if user_input:
                     response = generate_response(user_input)
-                    if not 'none' in response:                        
+                    if not 'no' in response:                        
                         print(f"Bot: {response}")
                         speak(response)
+                    # else:
+                    #     speak("Iam not Trained yet")
+                    #     print("Iam not Trained yet")
                         
                 if "sleep" in user_input or "mute" in user_input:
                     speak("iam muting sir")
