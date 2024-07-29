@@ -47,6 +47,7 @@ def greet():
 
 # Example conversation pairs
 conversations = [
+    ("Denver", ",sir"),
     ("hey Denver", ",Yes sir"),
     ("Hello", "Hello sir!"),
     ("How are you?", "I'm fine sir,"),
@@ -257,18 +258,18 @@ if __name__ == "__main__":
     print("Type 'quit' to exit")
     
     while True:
+        speak("This is denver, an vritual assistant,")
+        speak("Voice verification Needed !")
         Verification = voiceRec2.recognize_voice_from_mic()
         if 'kalai' in Verification:
+            speak("Verification Sucessfull, Hello sir")
             break
         else:
             continue    
-    while True:
-        
-        if 'kalai' in Verification:
-            speak("Verification Sucessfull, Hello sir")
-            user_input=wakeup().lower()
-        if "wake up" in user_input or "denver" in user_input:
-            greet()
+    while True:    
+        # user_input=wakeup().lower()
+        # if "wake up" in user_input or "denver" in user_input:
+        #     greet()
             while True:
                 user_input = take_command()
                 if user_input.lower() == 'exit':
