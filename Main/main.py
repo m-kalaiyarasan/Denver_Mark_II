@@ -9,6 +9,9 @@ import webbrowser
 import os
 import requests
 import pyaudio
+from bs4 import BeautifulSoup
+import urllib.parse
+import time
 # import stdlibWithroll # for my collede data's
 
 #import dowonloda 
@@ -29,7 +32,7 @@ sys.path.append(module3_dir)
 
 import FaceMain2 #for facerec
 import Whatsapp 
-import voiceRec2
+# import voiceRec2
 
 
 recognizer = sr.Recognizer()
@@ -47,6 +50,7 @@ def greet():
 
 # Example conversation pairs
 conversations = [
+    ("jarvis", "Iam not jarvis, iam denver, developed by kalaiyarasan"),
     ("Denver", ",sir"),
     ("hey Denver", ",Yes sir"),
     ("Hello", "Hello sir!"),
@@ -59,11 +63,50 @@ conversations = [
     ("Thanks", "You're welcome! sir"),
     ("Thank you", "No problem! Happy to help."),
     ("what are you doing", "Iam just listning for you sir"),
+    ("jarvis", "Iam not jarvis, iam denver, developed by kalaiyarasan"),
+    ("vignesh", "Hello mister vignesh")
 ]
 
 def speak(text):
     engine.say(text)
     engine.runAndWait()
+# def search_google(query):
+#     query = urllib.parse.quote_plus(query)
+#     url = f"https://www.google.com/search?q={query}"
+
+#     headers = {"User-Agent": "Mozilla/5.0"}
+#     response = requests.get(url, headers=headers)
+#     response.raise_for_status()
+
+#     soup = BeautifulSoup(response.text, 'html.parser')
+
+#     snippet = soup.find('div', class_='BNeawe s3v9rd AP7Wnd')
+#     if snippet:
+#         return snippet.get_text()
+#     else:
+#         return "No snippet found."
+def search_google(query, retries=3, delay=5):
+    query = urllib.parse.quote_plus(query)
+    url = f"https://www.google.com/search?q={query}"
+    headers = {"User-Agent": "Mozilla/5.0"}
+
+    for attempt in range(retries):
+        try:
+            response = requests.get(url, headers=headers)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.text, 'html.parser')
+            snippet = soup.find('div', class_='BNeawe s3v9rd AP7Wnd')
+            if snippet:
+                return snippet.get_text()
+            else:
+                return "No snippet found."
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 429:
+                print(f"Rate limit exceeded. Retrying in {delay} seconds...")
+                time.sleep(delay)
+            else:
+                raise
+    return "Failed to retrieve data after multiple attempts"
     
 def take_command():
     with sr.Microphone() as source: 
@@ -188,17 +231,19 @@ def generate_response(user_input):
         pyautogui.write(user_input)
         pyautogui.press('enter')
         return "none"
-    elif 'who' in user_input_tokens:
-        speak('')
-        try:
-            query = user_input.replace("who","") and user_input.replace("is","") and user_input.replace("denver","")
+    # elif 'who' in user_input_tokens:
+    #     speak('')
+    #     try:
+    #         query = user_input.replace("who","") and user_input.replace("is","") and user_input.replace("denver","")
             
-            results = wikipedia.summary(query, sentences=1)
-            speak("According to Wikipedia")
-            return results
-        except:
-            print("no result")
-            return "No results found"
+    #         results = wikipedia.summary(query, sentences=1)
+    #         speak("According to Wikipedia")
+    #         return results
+    #     except:
+    #         # print("no result")
+    #         answer = search_google(user_input)
+    #         return(answer)
+    
 
     # Time API
     elif "time" in user_input_tokens:
@@ -237,8 +282,15 @@ def generate_response(user_input):
             user_input_message = take_command()
             Whatsapp.data(user_input_name,user_input_message)
             return "Sent Succesfully"
-        
-        
+    # elif "what" in user_input_tokens or "explain" in user_input_tokens:
+    #     answer = search_google(user_input)
+    #     return(answer)
+    elif 'who' in user_input_tokens or "explain" in user_input_tokens or "what" in user_input_tokens or "when" in user_input_tokens or "is" in user_input_tokens:
+        # print("no result")
+        answer = search_google(user_input + " in one line")
+        print("Answer:", answer)
+        speak(answer)
+        return ""    
         
 
 
@@ -272,6 +324,7 @@ if __name__ == "__main__":
         # if "wake up" in user_input or "denver" in user_input:
         #     greet()
             while True:
+                # user_input = input("Enter Query: ")
                 user_input = take_command()
                 if user_input.lower() == 'exit':
                     break
